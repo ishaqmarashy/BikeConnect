@@ -1,0 +1,1 @@
+MainBooking.html = main booking page for customer view

@@ -1,0 +1,247 @@
+
+
+	CREATE DATABASE BIKECONNECT
+		WITH 
+		OWNER = postgres
+		ENCODING = 'UTF8'
+		LC_COLLATE = 'English_United States.1252'
+		LC_CTYPE = 'English_United States.1252'
+		TABLESPACE = pg_default
+		CONNECTION LIMIT = -1;
+
+	---------------------------------------------------------
+
+	COMMENT ON DATABASE BIKECONNECT
+		IS 'default administrative connection database';
+		
+	CREATE TABLE public."USERS"
+	(
+		"USERNAME" character varying(32)  PRIMARY KEY NOT NULL,
+		"PASSWORD" character varying(32)  NOT NULL,
+		"NAME" character varying(32) NOT NULL,
+		"EMAIL" character varying(32)UNIQUE NOT NULL);
+
+	ALTER TABLE public."USERS"
+		OWNER to postgres;
+
+		
+	CREATE TABLE  public."EMPLOYEES" (
+		"EID" SERIAL PRIMARY KEY,
+		"ADDRESS" character varying(128) NOT NULL
+	) INHERITS ("USERS");
+
+	ALTER TABLE public."EMPLOYEES"
+		OWNER to postgres;
+
+
+	CREATE TABLE "WORKCENTER" (
+		"CID"  SERIAL PRIMARY KEY,
+		"ADDRESS" character varying(128) NOT NULL
+	);
+	ALTER TABLE public."WORKCENTER"
+		OWNER to postgres;	
+
+
+	CREATE TABLE "EWC" (
+		"EID" SERIAL REFERENCES public."EMPLOYEES"("EID"),
+		"CID" SERIAL REFERENCES public."WORKCENTER"("CID"),
+		PRIMARY KEY("EID", "CID")
+	);
+	ALTER TABLE public."EWC"
+		OWNER to postgres;	
+
+	CREATE TABLE "VENDOR" (
+		"VID" SERIAL PRIMARY KEY,
+		"NAME" character(32) UNIQUE NOT NULL,
+		"ADDRESS" character varying(128) NOT NULL
+	);
+	ALTER TABLE public."VENDOR"
+		OWNER to postgres;	
+
+	CREATE TABLE "BIKESTATUS" (
+		 "STATUS" character(32) PRIMARY KEY NOT NULL
+	);
+
+	ALTER TABLE public."BIKESTATUS"
+		OWNER to postgres;	
+
+	CREATE TABLE "BIKETYPES" (
+		"BTYPE" character(32) PRIMARY KEY,
+		"COST" integer NOT NULL
+	);
+
+	ALTER TABLE public."BIKETYPES"
+		OWNER to postgres;	
+
+	CREATE TABLE "BIKEHUB" (
+		"HID" SERIAL PRIMARY KEY ,
+		"HNAME" character(32) UNIQUE NOT NULL,
+		"BCAPACITY"  integer NOT NULL,
+		"LATITUDE" float NOT NULL,
+		"LONGITUDE" float NOT NULL,
+		UNIQUE ("LATITUDE", "LONGITUDE")
+	);
+
+	ALTER TABLE public."BIKEHUB"
+		OWNER to postgres;	
+			CREATE TABLE "BIKES" (
+		"BID" SERIAL PRIMARY KEY,
+		"BTYPE" character(32) REFERENCES public."BIKETYPES"("BTYPE"),
+		"STATUS"  character(32) REFERENCES public."BIKESTATUS"("STATUS"),
+		"VID"  SERIAL REFERENCES public."VENDOR"("VID"),
+		"HID" SERIAL REFERENCES public."BIKEHUB"("HID"),
+	"LATITUDE" float ,
+		"LONGITUDE" float 	);
+
+	ALTER TABLE public."BIKES"
+		OWNER to postgres;	
+
+	CREATE TABLE "BOOKINGTYPE" (
+		 "BTYPE" character(32) PRIMARY KEY 
+	);
+	ALTER TABLE public."BOOKINGTYPE"
+		OWNER to postgres;	
+		
+	CREATE TABLE "BOOKING" (
+		"BOID" SERIAL PRIMARY KEY,	
+		"USERNAME" character varying(32) REFERENCES public."USERS"("USERNAME"),	
+		"DATEFROM"  timestamp with time zone NOT NULL,
+		"DATETO"  timestamp with time zone NOT NULL,
+		"BOOKINGTYPE" character(32) REFERENCES public."BOOKINGTYPE"("BTYPE"),
+		"GEAR" BOOLEAN
+	);
+	
+	ALTER TABLE public."BOOKING"
+		OWNER to postgres;	
+			
+	CREATE TABLE "COMPLAINTS" (
+		"BOID" SERIAL REFERENCES public."BOOKING"("BOID"),
+		"COMPLAINT" character varying(400) 
+	);
+	
+	ALTER TABLE public."COMPLAINTS"
+		OWNER to postgres;	
+		
+	CREATE TABLE "BB" (
+		"BOID" SERIAL REFERENCES public."BOOKING"("BOID"),
+		"BID" SERIAL REFERENCES public."BIKES"("BID"),
+		PRIMARY KEY("BOID", "BID")
+	);
+
+	ALTER TABLE public."BB"
+		OWNER to postgres;	
+		
+	CREATE TABLE "SESSIONS" (
+		"TOKEN"  character(32) PRIMARY KEY NOT NULL,
+		"USERNAME" character varying(32) REFERENCES public."USERS"("USERNAME")	,
+		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		);
+		
+	CREATE TABLE "ADMINSESSIONS" (
+		"TOKEN"  character(32) PRIMARY KEY NOT NULL,
+		"EID" integer REFERENCES public."EMPLOYEES"("EID")	,
+		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		);
+
+
+	ALTER TABLE public."SESSIONS"
+		OWNER to postgres;	
+		
+	GRANT ALL ON SCHEMA public TO postgres;
+	
+	CREATE VIEW "EMPLOYEESVIEWS" AS SELECT "USERNAME","NAME","EMAIL","WORKCENTER"."CID","WORKCENTER"."ADDRESS" FROM "EMPLOYEES" JOIN "EWC" USING ("EID") JOIN "WORKCENTER" USING ("CID") ;
+
+-- View: public."BOOKINGVIEW"
+
+-- DROP VIEW public."BOOKINGVIEW";
+
+CREATE OR REPLACE VIEW public."BOOKINGVIEW" AS
+ SELECT "BOOKING"."BOID",
+    "BOOKING"."USERNAME",
+    "BIKES"."HID",
+    "BIKEHUB"."HNAME",
+    "BOOKING"."DATEFROM",
+    "BOOKING"."DATETO",
+    "BOOKING"."BOOKINGTYPE",
+    "BB"."BID",
+    "BIKES"."BTYPE",
+    "BIKETYPES"."COST",
+    "BIKES"."LATITUDE",
+    "BIKES"."LONGITUDE",
+	"BOOKING"."GEAR"
+   FROM "BOOKING"
+     JOIN "BB" USING ("BOID")
+     JOIN "BIKES" USING ("BID")
+     JOIN "BIKEHUB" USING ("HID")
+     JOIN "BIKETYPES" USING ("BTYPE");
+
+ALTER TABLE public."BOOKINGVIEW"
+    OWNER TO postgres;
+
+
+-- View: public."COMPLAINTSVIEW"
+
+-- DROP VIEW public."COMPLAINTSVIEW";
+
+CREATE OR REPLACE VIEW public."COMPLAINTSVIEW" AS
+ SELECT "BOOKING"."BOID",
+    "BOOKING"."USERNAME",
+    "BIKES"."HID",
+    "BIKEHUB"."HNAME",
+    "BOOKING"."DATEFROM",
+    "BOOKING"."DATETO",
+    "BOOKING"."BOOKINGTYPE",
+    "BB"."BID",
+    "BIKES"."BTYPE",
+    "BIKETYPES"."COST",
+   "BIKES"."LATITUDE",
+    "BIKES"."LONGITUDE",	"BOOKING"."GEAR",
+    "COMPLAINTS"."COMPLAINT"
+   FROM "BOOKING"
+     JOIN "BB" USING ("BOID")
+     JOIN "BIKES" USING ("BID")
+     JOIN "COMPLAINTS" USING ("BOID")
+     JOIN "BIKEHUB" USING ("HID")
+     JOIN "BIKETYPES" USING ("BTYPE");
+
+ALTER TABLE public."COMPLAINTSVIEW"
+    OWNER TO postgres;
+
+
+
+	CREATE VIEW "BIKEHUBVIEW" AS SELECT "HID","HNAME","BCAPACITY","BID","BTYPE","STATUS","BIKEHUB"."LATITUDE","BIKEHUB"."LONGITUDE"  FROM "BIKES" JOIN "BIKEHUB" USING ("HID") ;
+	
+	GRANT ALL ON SCHEMA public TO PUBLIC;
+
+	INSERT INTO public."BIKESTATUS"(
+		"STATUS")
+		VALUES ('BROKEN');
+	INSERT INTO public."BIKESTATUS"(
+		"STATUS")
+		VALUES ('FUNCTIONING');
+	INSERT INTO public."BIKESTATUS"(
+		"STATUS")
+		VALUES ('INSERVICE');
+			INSERT INTO public."BIKESTATUS"(
+		"STATUS")
+		VALUES ('INUSE');
+		
+	INSERT INTO public."BOOKINGTYPE"(
+		"BTYPE")
+		VALUES ('BESPOKE');
+	INSERT INTO public."BOOKINGTYPE"(
+		"BTYPE")
+		VALUES ('NORMAL');
+
+	INSERT INTO public."BIKETYPES"(
+		"COST","BTYPE")
+		VALUES (11,'ROAD');
+	INSERT INTO public."BIKETYPES"(
+		"COST","BTYPE")
+		VALUES (12,'HYBRID/COMFORT');
+	INSERT INTO public."BIKETYPES"(
+		"COST","BTYPE")
+		VALUES (8,'COMMUTING');
+	INSERT INTO public."BIKETYPES"(
+		"COST","BTYPE")
+		VALUES (14,'TRACK');	

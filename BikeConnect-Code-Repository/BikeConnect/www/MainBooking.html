@@ -1,0 +1,475 @@
+	<!DOCTYPE html>
+	<html lang="en">
+
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>BikeConnect</title>
+
+		<!-- Bootstrap core CSS -->
+		<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Custom fonts for this template -->
+		<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+		<!-- Custom stlylesheet -->
+		<link type="text/css" rel="stylesheet" href="css/style.css" />
+		<!-- Custom styles for this template -->
+		<link href="css/grayscale.min.css" rel="stylesheet">
+
+		<link href="css/toastr.css" rel="stylesheet"/>
+
+		<script src="js/toastr.min.js"></script>
+
+		<script>
+			$(document).ready(function() {
+
+    // show when page load
+    Command: toastr["info"]("Manage your booking from right here on the main page and feel free to contact us for any inquiries! Please refer to the Local Biking Rules and Regulations page to stay safe and avoid any inconveniences", "Welcome to BikeConnect!")
+
+    toastr.options = {
+    	"closeButton": true,
+    	"debug": false,
+    	"newestOnTop": false,
+    	"progressBar": false,
+    	"positionClass": "toast-bottom-right",
+    	"preventDuplicates": false,
+    	"onclick": null,
+    	"showDuration": "300",
+    	"hideDuration": "1000",
+    	"timeOut": "5000",
+    	"extendedTimeOut": "1000",
+    	"showEasing": "swing",
+    	"hideEasing": "linear",
+    	"showMethod": "fadeIn",
+    	"hideMethod": "fadeOut"
+    }
+
+});
+
+</script>
+
+<script type="text/javascript">
+	$('#showToast').click(function () {
+
+		Command: toastr["success"]("You've successfully booked a bike! Use our search feature to recheck your details or cancel your ride any time.")
+
+		toastr.options = {
+			"closeButton": true,
+			"debug": false,
+			"newestOnTop": false,
+			"progressBar": false,
+			"positionClass": "toast-bottom-right",
+			"preventDuplicates": false,
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "5000",
+			"extendedTimeOut": "1000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		}
+
+	});
+</script>
+
+<style>
+	/* Set the size of the div element that contains the map */
+	#map {
+		height: 1000px;  /* The height is 400 pixels */
+		width: 100%;  /* The width is the width of the web page */
+	}
+
+</style>
+
+</head>
+
+<body id="page-top">
+
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+		<div class="container">
+			<img class="img-fluid mb-3 mb-lg-0" src="img/LogoMakr_4KevJP.png" alt="" style="">
+			<a class="navbar-brand js-scroll-trigger" href="#page-top"></a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				Menu
+				<i class="fas fa-bars"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link js-scroll-trigger" href="#about">Make a new booking</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link js-scroll-trigger" href="#projects">Check your booking</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link js-scroll-trigger" href="Pricing.html">Pricing</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link js-scroll-trigger" href="legalrules.html">Road Regulations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link js-scroll-trigger" href="#signup">Contact us</a>
+					</li>
+					<li class="nav-item">
+						<a id = "logout" class="nav-link js-scroll-trigger" href="#signup">Log out</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+
+
+
+	<!-- Header -->
+	<header class="masthead">
+		<div class="container d-flex h-100 align-items-center">
+			<div class="mx-auto text-center">
+				<h1 class="mx-auto my-0 text-" style="color: white">BikeConnect</h1>
+				<h2 class="text-white-50 mx-auto mt-2 mb-5"> Book a Bicycle near you now! </h2>
+				<a href="#about" class="btn btn-primary js-scroll-trigger">Find one near you</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- About Section -->
+	<section id="about" class="about-section text-center">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 mx-auto">
+					<h2 class="text-white mb-4">Make your booking</h2>
+					<p class="text-white-50"> Use our interactive map to see a bikehub near you, pick an available bike and confirm your details. It's as simple as that.
+					</p>
+				</div>
+
+			</div>
+		</div>
+		<!-- <div id="booking" class="about-section text-center"> -->
+			<div class="booking-form">
+				<form id="FORM" method="post">
+					<div class="row no-margin">
+						<div class="col-md-3" style="background-color: white">
+							<div class="form-group">
+								<span class="form-label" style="color: teal">Bike Hub</span>
+								<input class="form-control" type="coordinates" id="location" 
+								name="coordinatef" required>
+							</div>
+						</div>
+						<div class="col-md-4" style="background-color: white">
+							<div class="form-group">
+								<span class="form-label" style="color: teal">Pick-Up Time</span>
+								<input class="form-control" id="dtimefield" name="DATEFROM" type="datetime-local" min="2019-03-18T00:00" value="2019-03-18T00:00" required>
+							</div>
+						</div>
+						<div class="col-md-4" style="background-color: white">
+							<div class="form-group">
+								<span class="form-label" style="color: teal">Duration</span>
+								<input class="form-control" id="time" name="datetimef2" 
+								value="12:00" type="time" required>
+							</div>
+						</div>
+						<div class="col-md-3" style="background-color: white">
+							<div class="form-group">
+								<span class="form-label" style="color: teal">Bike Type</span>
+								<select id="inputBike" name="BTYPE" class="form-control" required>
+
+								</select>
+								<span class="select-arrow"></span>
+							</div>
+						</div>
+						<div class="col-md-3" style="background-color: white">
+							<div class="form-group">
+								<span class="form-label" style="color: teal">Booking Types</span>
+								<select id="BOOKINGTYPE" name="BOOKINGTYPE" class="form-control" required>
+
+								</select>
+								<span class="select-arrow"></span>
+							</div>
+						</div>
+						<div class="col-md-3" style="background-color: white">
+							<div class="form-group">
+								<span class="form-label" style="color: teal">Quantity</span>
+								<input class="form-control" name="QUANTITY" type="number" id="QUANTITY" min="1" max="10" value="1" required>
+							</div>
+							<div class="form-group">
+								<span class="form-label" style="color: teal">Include Gear</span>
+								<input  name="GEAR" type="checkbox" id="GEAR">
+							</div>
+						</div>
+						<div class="col-md-3" style="background-color: white">
+							<div class="form-btn">
+								<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" action ="submit" alt="PayPal - The safer, easier way to pay online!">
+								<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<!-- </div> -->
+			<!-- form section -->
+			<!-- (25.6181943, 56.27337469999998) -->
+
+
+	<!-- 
+			<section id="about" class="about-section text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 mx-auto">
+						<h2 class="text-white mb-4">Make your booking</h2>
+						<p class="text-white-50"> Use our interactive map to see a bikehub near you, pick an available bike and confirm your details. It's as simple as that.
+						</p>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-4"  style="width:800px; margin:0 auto;">
+						<label for="inputBike" style="color: white">Available Bikes</label>
+						<select id="inputBike" class="form-control">
+							<option id="inputBike1" selected>Choose...</option>
+						</select>
+					</div>
+					<div class="col-md-3 mb-3" style=" margin:0 auto;">
+						<label for="validationDefault04" style="color: white">Booking Location</label>
+						<input type="text" class="form-control" id="validationDefault04" placeholder="(Long,Lat)" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+						<label class="form-check-label mb-0 text-white-50" for="invalidCheck2">
+							Agree to terms and conditions
+						</label>
+					</div>
+					<a href="">Read terms and conditions</a>
+				</div>
+				<button class="btn btn-primary" type="submit">Request Booking</button>
+			-->
+
+
+			<div id="map">
+				<p id="MAPCONTENT"></p>
+			</div>
+
+			<form id="COMP" style="color:white;">
+				<div class="col-lg-8 mx-auto">
+					<h2 class="text-white mb-4">Have an issue?</h2>
+					<p class="text-white-50"> Use the form below to send us any complaints you may have with our bikes or service and we will be sure to address the issue and get back to you within 24 hours.
+					</p>
+				</div>
+				<div class="form-group" style="color:white; margin: 0 auto; width: 500px;">
+					Enter Your Bike ID here
+					<input type="number" class="form-control"  name="BOID" id="BOID"required >Enter the Details of your complaint here
+					<input type="text" class="form-control" name="COMPLAINT" id="COMPLAINT" required>
+					<button type="submit" action="submit" class="btn btn-primary" >Submit</button>
+				</div>
+
+			</form>
+
+			<!-- Projects Section -->
+			<section id="projects" class="projects-section bg-light">
+				<div class="container">
+
+					<!-- Featured Project Row -->
+					<div class="row align-items-center no-gutters mb-4 mb-lg-5">
+						<div class="col-xl-8 col-lg-7">
+							<img class="img-fluid mb-3 mb-lg-0 w3-round" src="img/bikewall.jpg" alt="">
+						</div>
+						<div class="col-xl-4 col-lg-5">
+							<div class="featured-text text-center text-lg-left">
+								<h4 style="font-weight: bold;">Check your booking details</h4>
+								<p class="text-black-50 mb-0">Enter your booking ID in the search bar below to receive details about your bike booking. If you would like to cancel or make a change to your booking, please click the respective buttons. If you have any inquiries, feel free to contact our support team!</p>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<button class="btn btn-outline-secondary" type="button" id="button-addon1">Search</button>
+								<input type="Number" id ="BIKESEARCH" value='' class="form-control" placeholder="Enter ID " aria-label="Example text with button addon" aria-describedby="button-addon1" style="color:black; margin: 0 auto; width: 500px;">
+							</div>
+						</div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Booking Type</th>
+									<th scope="col">Booked For</th>
+									<th scope="col">Reserved From</th>
+									<th scope="col">Reserved To</th>
+									<th scope="col">Bike ID Number</th>
+									<th scope="col">Bike Hub</th>
+									<th scope="col">Includes Gear</th>
+									<th scope="col">Cancel</th>
+								</tr>
+							</thead>
+							<tbody id ='TABLE1'>
+							</tbody>
+						</table>	
+
+						<div class="container">
+							<p style="margin-left:"</p>
+
+
+
+								<!-- Project One Row -->
+								<div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+									<div class="col-lg-6">
+										<img class="img-fluid" src="img/demo-image-01.jpg" alt="">
+									</div>
+									<div class="col-lg-6">
+										<div class="bg-black text-center h-100 project">
+											<div class="d-flex h-100">
+												<div class="project-text w-100 my-auto text-center text-lg-left">
+													<h4 class="text-white">Road Safety and Traffic Regulations</h4>
+													<p class="mb-0 text-white-50">Consult our Traffic Law page to know local biking laws and precautions you can take to make sure you're safe on the road!</p>
+													<hr class="d-none d-lg-block mb-0 ml-0">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Project Two Row -->
+								<div class="row justify-content-center no-gutters">
+									<div class="col-lg-6">
+										<img class="img-fluid" src="img/demo-image-02.jpg" alt="">
+									</div>
+									<div class="col-lg-6 order-lg-first">
+										<div class="bg-black text-center h-100 project">
+											<div class="d-flex h-100">
+												<div class="project-text w-100 my-auto text-center text-lg-right">
+													<h4 class="text-white">A Unique Experience For Everyone</h4>
+													<p class="mb-0 text-white-50">BikeConnect brings life to an automated city. 
+													With cars monopolizing the road and causing traffic around every bend, BikeConnect offers an eco-friendly, health promoting and fun way to help people get around easier than ever before.</p>
+													<hr class="d-none d-lg-block mb-0 mr-0">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</section>
+
+						<!-- Signup Section -->
+						<section id="signup" class="signup-section">
+							<div class="container">
+								<div class="row">
+									<div class="col-md-10 col-lg-8 mx-auto text-center">
+
+										<i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+										<h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+
+										<form class="form-inline d-flex">
+											<input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
+											<button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
+										</form>
+
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Contact Section -->
+						<section class="contact-section bg-black">
+							<div class="container">
+								<div class="row">
+									<div class="col-md-4 mb-3 mb-md-0">
+										<div class="card py-4 h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-map-marked-alt text-primary mb-2"></i>
+												<h4 class="text-uppercase m-0">Address</h4>
+												<hr class="my-4">
+												<div class="small text-black-50">Heriot-Watt University, Academic City, Dubai, UAE</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4 mb-3 mb-md-0">
+										<div class="card py-4 h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-envelope text-primary mb-2"></i>
+												<h4 class="text-uppercase m-0">Email</h4>
+												<hr class="my-4">
+												<div class="small text-black-50">
+													<a href="#">rs45@hw.ac.uk</a>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4 mb-3 mb-md-0">
+										<div class="card py-4 h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-mobile-alt text-primary mb-2"></i>
+												<h4 class="text-uppercase m-0">Main Office</h4>
+												<hr class="my-4">
+												<div class="small text-black-50">+971 528978070</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="social d-flex justify-content-center">
+									<a href="#" class="mx-2">
+										<i class="fab fa-twitter"></i>
+									</a>
+									<a href="#" class="mx-2">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+									<a href="#" class="mx-2">
+										<i class="fab fa-github"></i>
+									</a>
+								</div>
+							</div>
+
+						</section>
+
+						<!-- Footer -->
+						<footer class="bg-black small text-center text-white-50">
+							<div class="container">
+								Copyright &copy; BikeConnect 2018/2019
+							</div>
+						</footer>
+
+						<!-- Bootstrap core JavaScript -->
+						<script src="vendor/jquery/jquery.min.js"></script>
+						<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+						<!-- Plugin JavaScript -->
+						<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+						<!-- Custom scripts for this template -->
+						<script src="js/grayscale.min.js"></script>
+
+						<!--LoginCheck-->
+						<script src="js/logout.js"></script>
+						<script src="js/logink.js"></script>
+						<script src="js/map.js"></script>
+						<script src="js/bikesearch.js"></script>
+						<script src="js/bookingtypes.js"></script>
+						<script src="js/cancel.js"></script>
+						<script src="js/complaint.js"></script>
+
+						<script src="js/MainBooking.js"></script>
+						<script src="js/datefield.js"></script>
+						<script src="js/biketypes.js"></script>
+
+					</body>
+
+					</html>

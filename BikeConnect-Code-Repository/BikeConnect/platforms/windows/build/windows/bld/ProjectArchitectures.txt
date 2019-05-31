@@ -1,0 +1,1 @@
+E:\git\BikeConnect-Code-Repository\BikeConnect\platforms\windows\CordovaApp.Windows10.jsproj;neutral
